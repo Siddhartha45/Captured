@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Photo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+</head>
+
+<body>
+
+    <!-- Sticky Header -->
+    <header style="position: sticky; top: 0; background: #111; padding: 1em 2em; z-index: 1000;">
+        <nav style="display: flex; justify-content: space-between; align-items: center; color: white;">
+            <h1 style="margin: 0;">
+                <a href="{% url 'home' %}" style="color: white; text-decoration: none; border: none;">captured</a>
+            </h1>
+            <ul style="list-style: none; display: flex; gap: 1.5em; margin: 0;">
+                <li><a href="{% url 'user_photos' %}" style="color: white; text-decoration: none;">{{ request.user.email }}</a></li>
+                <li><a href="{% url 'home' %}" style="color: white; text-decoration: none;">Home</a></li>
+                <li><a href="{% url 'signout' %}" style="color: white; text-decoration: none;">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    {% if success %}
+    <div style="background-color: #111; color: white; padding: 1em 2em; margin: 2em auto; max-width: 600px; text-align: center; border-radius: 4px; border: 1px solid #333;">
+        {{ success }}
+    </div>
+    {% endif %}
+
+    <!-- Edit Photo Form -->
+    <main style="padding: 3em 2em; max-width: 600px; margin: auto;">
+        <h2 style="text-align: center;">Edit Photo</h2>
+        <form method="POST" style="margin-top: 2em;">
+            {% csrf_token %}
+
+            <!-- Current Image Preview -->
+            <div style="margin-bottom: 1.5em; text-align: center;">
+                <img src="{{ photo.image.url }}" alt="{{ photo.title }}" style="max-width: 100%; max-height: 300px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+
+            <!-- Title Field -->
+            <div style="margin-bottom: 1.5em;">
+                <label for="title">Title:</label><br>
+                <input type="text" name="title" id="title" value="{{ photo.title }}" style="width: 100%;" required>
+            </div>
+
+            <!-- Description Field -->
+            <div style="margin-bottom: 1.5em;">
+                <label for="description">Description (optional):</label><br>
+                <textarea name="description" id="description" rows="4" style="width: 100%;">{{ photo.description }}</textarea>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" style="padding: 0.5em 1.5em; background-color: #007bff; color: white; border: none; border-radius: 4px;">Save Changes</button>
+        </form>
+
+        <!-- Go Back Button -->
+        <div style="margin-top: 1.5em; text-align: center;">
+            <a href="{% url 'user_photos' %}" style="padding: 0.5em 1.5em; background-color: #555; color: white; text-decoration: none; border-radius: 4px;">Go Back</a>
+        </div>
+    </main>
+
+</body>
+</html>

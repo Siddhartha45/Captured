@@ -1,0 +1,64 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Uploaded Photos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+    <!-- JS -->
+    <script src="{% static 'assets/js/main.js' %}" defer></script>
+</head>
+
+<body style="background-color: #111; color: #eee;">
+
+    <!-- Sticky Header -->
+    <header style="position: sticky; top: 0; background: #111; padding: 1em 2em; z-index: 1000;">
+        <nav style="display: flex; justify-content: space-between; align-items: center; color: white;">
+            <h1 style="margin: 0;">
+                <a href="{% url 'home' %}" style="color: white; text-decoration: none; border: none;">captured</a>
+            </h1>
+            <ul style="list-style: none; display: flex; gap: 1.5em; margin: 0;">
+                <li><a style="color: white; text-decoration: none;">{{ request.user.email }}</a></li>
+                <li><a href="{% url 'home' %}" style="color: white; text-decoration: none;">Home</a></li>
+                <li><a href="{% url 'signout' %}" style="color: white; text-decoration: none;">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main style="padding: 3em 2em; max-width: 900px; margin: auto;">
+        <h2 style="text-align: center; margin-bottom: 2em; color: #eee;">My Uploaded Photos</h2>
+
+        {% if photos %}
+            <ul style="list-style: none; padding: 0;">
+                {% for photo in photos %}
+                    <li style="background-color: #222; margin-bottom: 1.5em; padding: 1em 1.5em; border-radius: 5px; display: flex; align-items: center; justify-content: space-between;">
+                        
+                        <!-- Thumbnail -->
+                        <div style="flex-shrink: 0;">
+                            <img src="{{ photo.image.url }}" alt="photo" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #444;">
+                        </div>
+
+                        <!-- Details -->
+                        <div style="flex-grow: 1; margin-left: 1.5em;">
+                            <strong style="color: #fff;">{{ photo.title }}</strong><br>
+                        </div>
+
+                        <!-- Actions -->
+                        <div style="display: flex; gap: 1em;">
+                            <a href="{% url 'photo_edit' photo.id %}" style="color: #66bfff; text-decoration: none;">Edit</a>
+                            <a href="{% url 'photo_delete' photo.id %}" style="color: #ff4d4d; text-decoration: none;">Delete</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p style="text-align: center; color: #ccc;">You haven't uploaded any photos yet.</p>
+        {% endif %}
+    </main>
+
+</body>
+</html>
