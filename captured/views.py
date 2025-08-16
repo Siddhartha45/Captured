@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Photo
 from .helpers import convert_heif_to_jpeg
+import cloudinary.uploader
 
 User = get_user_model()
 
@@ -25,8 +26,15 @@ def photo_upload(request):
         # jpeg_image = convert_heif_to_jpeg(image)
         if image.content_type in ['image/heic', 'image/heif']:
             image = convert_heif_to_jpeg(image)
+        
+        # Upload to Cloudinary with dynamic folder
+        upload_result = cloudinary.uploader.upload(
+            image,
+            folder=f'images/user_{request.user.id}'
+        )
 
-        Photo.objects.create(user=request.user, image=image, title=title, description=description)
+        Photo.objects.create(user=request.user, image=upload_result['public_id'], title=title, description=description)
+        
         return render(request, 'captured/photo_upload.html', {'success':'Photo Uploaded.'})
 
     return render(request, 'captured/photo_upload.html')
