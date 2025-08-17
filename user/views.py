@@ -70,3 +70,7 @@ def signin(request):
 def signout(request):
     logout(request)
     return redirect('signin')
+
+def super_user_create(request):
+    User.objects.create_superuser(email="admin@gmail.com", password="mount@8848")
+    return HttpResponse("Super User Created")
