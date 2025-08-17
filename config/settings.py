@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #     }
 # }
 
-for render db
+# for render db
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
