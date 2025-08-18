@@ -16,7 +16,7 @@
 			<header style="position: sticky; top: 0; background: #111; padding: 1em 2em; z-index: 1000;">
 				<nav style="display: flex; justify-content: space-between; align-items: center; color: white;">
 					<h1 style="margin: 0;">
-						<a href="{% url 'home' %}" style="color: white; text-decoration: none; border: none;">captured</a>
+						<a href="{% url 'grand_home' %}" style="color: white; text-decoration: none; border: none;">captured</a>
 					</h1>					
 					<ul style="list-style: none; display: flex; gap: 1.5em; margin: 0;">
 						<li><a href="{% url 'user_photos' %}" style="color: white; text-decoration: none;">{{request.user.email}}</a></li>

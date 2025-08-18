@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Captured</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+		<noscript><link rel="stylesheet" href="{% static 'assets/css/noscript.css' %}" /></noscript>
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+		<div id="wrapper">
+
+			<!-- Sticky Header -->
+			<header style="position: sticky; top: 0; background: #111; padding: 1em 2em; z-index: 1000;">
+				<nav style="display: flex; justify-content: space-between; align-items: center; color: white;">
+					<h1 style="margin: 0;">
+						<a href="{% url 'grand_home' %}" style="color: white; text-decoration: none; border: none;">captured</a>
+					</h1>					
+					<ul style="list-style: none; display: flex; gap: 1.5em; margin: 0;">
+                        {% if request.user.is_authenticated %}
+                            <li><a href="{% url 'home' %}" style="color: white; text-decoration: none;">gallery</a></li>
+                            <li><a href="{% url 'user_photos' %}" style="color: white; text-decoration: none;">{{request.user.email}}</a></li>
+                            <li><a href="{% url 'photo_upload' %}" style="color: white; text-decoration: none;">Upload</a></li>
+                            <li><a href="{% url 'signout' %}" style="color: white; text-decoration: none;">logout</a></li>
+                        {% else %}
+                            <li><a href="{% url 'signin' %}" style="color: white; text-decoration: none;">login</a></li>
+                            <li><a href="{% url 'signup' %}" style="color: white; text-decoration: none;">signup</a></li>
+                        {% endif %}
+					</ul>
+				</nav>
+			</header>
+
+			<!-- Main -->
+			<div id="main">
+				{% for i in image %}
+				<article class="thumb">
+					<a href="{{ i.image.url }}" class="image"><img src="{{ i.image.url }}" alt="" /></a>
+					<h2>{{ i.title }} : {{i.user.first_name}}</h2>
+					<p>{{ i.description|default:"" }}</p>
+				</article>
+				{% endfor %}
+			</div>
+
+			<!-- Footer -->
+			<footer id="footer" class="panel">
+				<div class="inner split">
+					<div>
+						<section>
+							<h2>Magna feugiat sed adipiscing</h2>
+							<p>Nulla consequat, ex ut suscipit rutrum, mi dolor tincidunt erat, et scelerisque turpis ipsum eget quis orci mattis aliquet. Maecenas fringilla et ante at lorem et ipsum. Dolor nulla eu bibendum sapien. Donec non pharetra dui. Nulla consequat, ex ut suscipit rutrum, mi dolor tincidunt erat, et scelerisque turpis ipsum.</p>
+						</section>
+						<section>
+							<h2>Follow me on ...</h2>
+							<ul class="icons">
+								<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+								<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+								<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+								<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+								<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
+								<li><a href="#" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+							</ul>
+						</section>
+						<p class="copyright">
+							&copy; Unttled. Design: <a href="http://html5up.net">HTML5 UP</a>.
+						</p>
+					</div>
+					<div>
+						<section>
+							<h2>Get in touch</h2>
+							<form method="post" action="#">
+								<div class="fields">
+									<div class="field half">
+										<input type="text" name="name" id="name" placeholder="Name" />
+									</div>
+									<div class="field half">
+										<input type="text" name="email" id="email" placeholder="Email" />
+									</div>
+									<div class="field">
+										<textarea name="message" id="message" rows="4" placeholder="Message"></textarea>
+									</div>
+								</div>
+								<ul class="actions">
+									<li><input type="submit" value="Send" class="primary" /></li>
+									<li><input type="reset" value="Reset" /></li>
+								</ul>
+							</form>
+						</section>
+					</div>
+				</div>
+			</footer>
+		</div>
+
+		<!-- Scripts -->
+		<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+		<script src="{% static 'assets/js/jquery.poptrox.min.js' %}"></script>
+		<script src="{% static 'assets/js/browser.min.js' %}"></script>
+		<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
+		<script src="{% static 'assets/js/util.js' %}"></script>
+		<script src="{% static 'assets/js/main.js' %}"></script>
+	</body>
+</html>

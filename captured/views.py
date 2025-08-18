@@ -65,3 +65,7 @@ def photo_edit(request, id):
     
     return render(request, 'captured/photo_edit.html', context)
 
+def grand_home(request):
+    """even non authenticated users can see others photos"""
+    photos = Photo.objects.all()
+    return render(request, 'captured/grand_home.html', {'image':photos})
