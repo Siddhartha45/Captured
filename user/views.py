@@ -59,12 +59,21 @@ def signin(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return render(request, 'user/login.html', {'error': f'No account found with: {email}'})
+            
+        if not user.is_active:
+            return render(request, 'user/login.html', {'error': 'Mail has been sent to you with verification link, Please verify and try again!'})
+        
         user = authenticate(request, email=email, password=password)
         if user:
             login(request, user)
             return redirect('home')
         else:
             return render(request, 'user/login.html', {'error': 'Invalid credentials'})
+        
     return render(request, 'user/login.html')
 
 def signout(request):

@@ -28,13 +28,17 @@
 
 			<!-- Main -->
 			<div id="main">
-				{% for i in image %}
-				<article class="thumb">
-					<a href="{{ i.image.url }}" class="image"><img src="{{ i.image.url }}" alt="" /></a>
-					<h2>{{ i.title }}</h2>
-					<p>{{ i.description|default:"" }}</p>
-				</article>
-				{% endfor %}
+				{% if image %}
+					{% for i in image %}
+						<article class="thumb">
+							<a href="{{ i.image.url }}" class="image"><img src="{{ i.image.url }}" alt="" /></a>
+							<h2>{{ i.title }}</h2>
+							<p>{{ i.description|default:"" }}</p>
+						</article>
+					{% endfor %}
+				{% else %}
+					"You have no uploads."
+				{% endif %}
 			</div>
 
 			<!-- Footer -->

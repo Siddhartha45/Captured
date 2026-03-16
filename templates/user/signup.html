@@ -98,6 +98,14 @@
 </head>
 <body>
     <div class="form-container">
+        <header style="position: sticky; top: 0; background: #111; padding: 1em 2em; z-index: 1000;">
+            <nav style="display: flex; justify-content: space-between; align-items: center; color: white;">
+                <h1 style="margin: 0;">
+                    <a href="{% url 'grand_home' %}" style="color: white; text-decoration: none; border: none;">captured</a>
+                </h1>					
+            </nav>
+        </header>
+        
         <h2>Create Account</h2>
 
         {% if error %}

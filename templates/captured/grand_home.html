@@ -26,7 +26,7 @@
                             <li><a href="{% url 'signout' %}" style="color: white; text-decoration: none;">logout</a></li>
                         {% else %}
                             <li><a href="{% url 'signin' %}" style="color: white; text-decoration: none;">login</a></li>
-                            <li><a href="{% url 'signup' %}" style="color: white; text-decoration: none;">signup</a></li>
+                            {% comment %} <li><a href="{% url 'signup' %}" style="color: white; text-decoration: none;">signup</a></li> {% endcomment %}
                         {% endif %}
 					</ul>
 				</nav>
@@ -34,7 +34,7 @@
 
 			<!-- Main -->
 			<div id="main">
-				{% if i %}
+				{% if image %}
 					{% for i in image %}
 					<article class="thumb">
 						<a href="{{ i.image.url }}" class="image"><img src="{{ i.image.url }}" alt="" /></a>
