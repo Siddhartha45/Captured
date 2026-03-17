@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 
+# for testing only mail
+from django.http import HttpResponse
+import socket
+
 from .models import Photo
 from .helpers import convert_heif_to_jpeg
 import cloudinary.uploader
@@ -69,3 +73,35 @@ def grand_home(request):
     """even non authenticated users can see others photos"""
     photos = Photo.objects.all()
     return render(request, 'captured/grand_home.html', {'image':photos})
+
+
+
+
+def test_email(request):
+    try:
+        socket.setdefaulttimeout(5)
+        sock = socket.create_connection(('smtp.gmail.com', 587), timeout=5)
+        sock.close()
+        port_587 = "Port 587 reachable"
+    except Exception as e:
+        port_587 = f"Port 587 BLOCKED: {e}"
+
+    try:
+        sock = socket.create_connection(('smtp.gmail.com', 465), timeout=5)
+        sock.close()
+        port_465 = "Port 465 reachable"
+    except Exception as e:
+        port_465 = f"Port 465 BLOCKED: {e}"
+
+    try:
+        from django.core.mail import send_mail
+        send_mail('Test', 'Test body', None, ['borone5483@paylaar.com'], fail_silently=False)
+        mail_result = "Mail sent successfully"
+    except Exception as e:
+        mail_result = f"Mail failed: {e}"
+
+    return HttpResponse(f"""
+        {port_587}<br>
+        {port_465}<br>
+        {mail_result}
+    """)
