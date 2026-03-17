@@ -95,7 +95,7 @@ def test_email(request):
 
     try:
         from django.core.mail import send_mail
-        send_mail('Test', 'Test body', None, ['borone5483@paylaar.com'], fail_silently=False)
+        send_mail('Test', 'Test body', None, ['sanjivr361@gmail.com'], fail_silently=False)
         mail_result = "Mail sent successfully"
     except Exception as e:
         mail_result = f"Mail failed: {e}"
