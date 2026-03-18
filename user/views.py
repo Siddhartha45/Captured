@@ -28,16 +28,16 @@ def signup(request):
         
         user = User.objects.create_user(email=email, password=password1, first_name=first_name, last_name=last_name, is_active = False)
         
-        uid = urlsafe_base64_encode(force_bytes(user.id))
-        token = default_token_generator.make_token(user)
-        link = request.build_absolute_uri(f'/verify/{uid}/{token}/')
-        send_mail(
-            'Verify your email',
-            f'Click this link to verify your email: {link}',
-            None,
-            [email],
-            fail_silently=False,
-        )
+        # uid = urlsafe_base64_encode(force_bytes(user.id))
+        # token = default_token_generator.make_token(user)
+        # link = request.build_absolute_uri(f'/verify/{uid}/{token}/')
+        # send_mail(
+        #     'Verify your email',
+        #     f'Click this link to verify your email: {link}',
+        #     None,
+        #     [email],
+        #     fail_silently=False,
+        # )
 
         return redirect('signin')
     return render(request, 'user/signup.html')
@@ -48,11 +48,10 @@ def verify_email(request, uidb64, token):
 
     if default_token_generator.check_token(user, token):
         user.is_active = True
-        user.save()
+        user.save(update_fields=["is_active"])
         return redirect('signin')
     else:
         return HttpResponse("Invalid or expired verification link.")
-
 
 def signin(request):
     if request.method == 'POST':
@@ -79,7 +78,3 @@ def signin(request):
 def signout(request):
     logout(request)
     return redirect('signin')
-
-def super_user_create(request):
-    User.objects.create_superuser(email="admin@gmail.com", password="mount@8848")
-    return HttpResponse("Super User Created")
