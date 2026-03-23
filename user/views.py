@@ -7,6 +7,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
+from .utils import send_verification_email
+
 User = get_user_model()
 
 def signup(request):
@@ -28,9 +30,9 @@ def signup(request):
         
         user = User.objects.create_user(email=email, password=password1, first_name=first_name, last_name=last_name, is_active = False)
         
-        # uid = urlsafe_base64_encode(force_bytes(user.id))
-        # token = default_token_generator.make_token(user)
-        # link = request.build_absolute_uri(f'/verify/{uid}/{token}/')
+        uid = urlsafe_base64_encode(force_bytes(user.id))
+        token = default_token_generator.make_token(user)
+        link = request.build_absolute_uri(f'/verify/{uid}/{token}/')
         # send_mail(
         #     'Verify your email',
         #     f'Click this link to verify your email: {link}',
@@ -38,14 +40,18 @@ def signup(request):
         #     [email],
         #     fail_silently=False,
         # )
+        send_verification_email(email, link, first_name)
 
         return redirect('signin')
     return render(request, 'user/signup.html')
 
 def verify_email(request, uidb64, token):
     uid = urlsafe_base64_decode(uidb64).decode()
-    user = User.objects.get(id=uid)
-
+    try:
+        user = User.objects.get(id=uid)
+    except User.DoesNotExist:
+        return HttpResponse("Account has been deleted")
+    
     if default_token_generator.check_token(user, token):
         user.is_active = True
         user.save(update_fields=["is_active"])
