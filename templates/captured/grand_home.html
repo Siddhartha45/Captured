@@ -38,7 +38,7 @@
 					{% for i in image %}
 					<article class="thumb">
 						<a href="{{ i.image.url }}" class="image"><img src="{{ i.image.url }}" alt="" /></a>
-						<h2>{{ i.title }} : {{i.user.first_name}}</h2>
+						<h2>{{ i.title }} : by {{i.user.first_name}}</h2>
 						<p>{{ i.description|default:"" }}</p>
 					</article>
 					{% endfor %}
