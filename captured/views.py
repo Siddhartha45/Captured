@@ -27,8 +27,12 @@ def photo_upload(request):
         title = request.POST['title']
         description = request.POST.get('description', '')
 
-        # jpeg_image = convert_heif_to_jpeg(image)
-        if image.content_type in ['image/heic', 'image/heif']:
+        content_type = image.content_type.lower()
+        filename_ext = image.name.rsplit('.', 1)[-1].lower()
+        HEIC_CONTENT_TYPES = {'image/heic', 'image/heif', 'image/x-heic', 'image/x-heif'}
+        HEIC_EXTENSIONS = {'heic', 'heif'}
+        
+        if content_type in HEIC_CONTENT_TYPES or filename_ext in HEIC_EXTENSIONS:
             image = convert_heif_to_jpeg(image)
         
         # Upload to Cloudinary with dynamic folder

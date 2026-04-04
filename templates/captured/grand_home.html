@@ -20,8 +20,8 @@
 					</h1>					
 					<ul style="list-style: none; display: flex; gap: 1.5em; margin: 0;">
                         {% if request.user.is_authenticated %}
-                            <li><a href="{% url 'home' %}" style="color: white; text-decoration: none;">gallery</a></li>
                             <li><a href="{% url 'user_photos' %}" style="color: white; text-decoration: none;">{{request.user.email}}</a></li>
+							<li><a href="{% url 'home' %}" style="color: white; text-decoration: none;">gallery</a></li>
                             <li><a href="{% url 'photo_upload' %}" style="color: white; text-decoration: none;">Upload</a></li>
                             <li><a href="{% url 'signout' %}" style="color: white; text-decoration: none;">logout</a></li>
                         {% else %}
