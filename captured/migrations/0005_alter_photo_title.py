@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('captured', '0004_alter_photo_title'),
+        ("captured", "0004_alter_photo_title"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='photo',
-            name='title',
+            model_name="photo",
+            name="title",
             field=models.CharField(blank=True, max_length=150, null=True),
         ),
     ]

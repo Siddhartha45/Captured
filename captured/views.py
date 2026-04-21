@@ -12,78 +12,88 @@ import cloudinary.uploader
 
 User = get_user_model()
 
+
 @login_required
 def home(request):
     image = Photo.objects.filter(user=request.user)
 
-    context = {'image':image}
+    context = {"image": image}
 
-    return render(request, 'captured/index.html', context)
+    return render(request, "captured/index.html", context)
+
 
 @login_required
 def photo_upload(request):
-    if request.method == 'POST':
-        image = request.FILES['image']
-        title = request.POST['title']
-        description = request.POST.get('description', '')
+    if request.method == "POST":
+        image = request.FILES["image"]
+        title = request.POST["title"]
+        description = request.POST.get("description", "")
 
         content_type = image.content_type.lower()
-        filename_ext = image.name.rsplit('.', 1)[-1].lower()
-        HEIC_CONTENT_TYPES = {'image/heic', 'image/heif', 'image/x-heic', 'image/x-heif'}
-        HEIC_EXTENSIONS = {'heic', 'heif'}
-        
+        filename_ext = image.name.rsplit(".", 1)[-1].lower()
+        HEIC_CONTENT_TYPES = {
+            "image/heic",
+            "image/heif",
+            "image/x-heic",
+            "image/x-heif",
+        }
+        HEIC_EXTENSIONS = {"heic", "heif"}
+
         if content_type in HEIC_CONTENT_TYPES or filename_ext in HEIC_EXTENSIONS:
             image = convert_heif_to_jpeg(image)
-        
+
         # Upload to Cloudinary with dynamic folder
         upload_result = cloudinary.uploader.upload(
-            image,
-            folder=f'images/user_{request.user.id}'
+            image, folder=f"images/user_{request.user.id}"
         )
 
-        Photo.objects.create(user=request.user, image=upload_result['public_id'], title=title, description=description)
-        
-        return render(request, 'captured/photo_upload.html', {'success':'Photo Uploaded.'})
+        Photo.objects.create(
+            user=request.user,
+            image=upload_result["public_id"],
+            title=title,
+            description=description,
+        )
 
-    return render(request, 'captured/photo_upload.html')
+        return render(
+            request, "captured/photo_upload.html", {"success": "Photo Uploaded."}
+        )
+
+    return render(request, "captured/photo_upload.html")
+
 
 @login_required
 def user_upload_list(request):
     photos = Photo.objects.filter(user=request.user)
 
-    context = {'photos':photos}
-    return render(request, 'captured/user_photos.html', context)
+    context = {"photos": photos}
+    return render(request, "captured/user_photos.html", context)
+
 
 @login_required
 def photo_delete(request, id):
     photo = Photo.objects.get(id=id)
     photo.delete()
-    return redirect('user_photos')
+    return redirect("user_photos")
+
 
 @login_required
 def photo_edit(request, id):
     photo = Photo.objects.get(id=id, user=request.user)
-    context = {'photo': photo}
+    context = {"photo": photo}
 
-    if request.method == 'POST':
-        photo.title = request.POST['title']
-        photo.description = request.POST.get('description', '')
+    if request.method == "POST":
+        photo.title = request.POST["title"]
+        photo.description = request.POST.get("description", "")
         photo.save()
-        return redirect('user_photos')
-    
-    return render(request, 'captured/photo_edit.html', context)
+        return redirect("user_photos")
+
+    return render(request, "captured/photo_edit.html", context)
+
 
 def grand_home(request):
     """even non authenticated users can see others photos"""
     photos = Photo.objects.all()
-    return render(request, 'captured/grand_home.html', {'image':photos})
-
-
-
-
-
-
-
+    return render(request, "captured/grand_home.html", {"image": photos})
 
 
 # to test if render is blocking smtp

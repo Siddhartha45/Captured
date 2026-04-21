@@ -3,17 +3,14 @@ from decouple import config
 
 
 url = "https://api.brevo.com/v3/smtp/email"
-    
+
 headers = {
     "accept": "application/json",
-    "api-key": config('BREVO_API_KEY'),
-    "content-type": "application/json"
+    "api-key": config("BREVO_API_KEY"),
+    "content-type": "application/json",
 }
 
-sender = {
-            "name": "Captured",
-            "email": config('BREVO_SENDER_EMAIL')
-        }
+sender = {"name": "Captured", "email": config("BREVO_SENDER_EMAIL")}
 
 
 def send_verification_email(email, link, first_name):
@@ -34,9 +31,9 @@ def send_verification_email(email, link, first_name):
                 Verify Email
             </a>
             <p>If you did not create an account, ignore this email. Please do not share this link with anyone!!!</p>
-        """
+        """,
     }
-    
+
     response = requests.post(url, json=payload, headers=headers)
     return response.status_code == 201
 
@@ -59,8 +56,8 @@ def password_reset_mail(email, link, first_name):
                 Verify Email
             </a>
             <p>Please do not share this link with anyone!!!</p>
-        """
+        """,
     }
-    
+
     response = requests.post(url, json=payload, headers=headers)
     return response.status_code == 201

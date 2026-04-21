@@ -1,4 +1,5 @@
 media/
 .env
-config/settings.py
+# config/settings.py
 db.sqlite3
+.DS_Store
