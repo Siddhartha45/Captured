@@ -35,7 +35,7 @@
   const lbDesc     = document.getElementById('lbDescription');
   const lbUsername = document.getElementById('lbUsername');
   const lbAvatar   = document.getElementById('lbAvatar');
-  const lbDate     = document.getElementById('lbDate');
+
 
   function openLightbox(card) {
     const data = card.dataset;
@@ -43,9 +43,9 @@
     lbImg.src        = data.image;
     lbImg.alt        = data.title;
     lbTitle.textContent    = data.title;
-    lbUsername.textContent = '@' + data.user;
-    lbAvatar.textContent   = data.user.charAt(0).toUpperCase();
-    lbDate.textContent     = data.date || '';
+    lbUsername.textContent = data.user;
+    lbAvatar.innerHTML   = `<a href="/user-gallery/${data.userid}/" style="color: inherit; text-decoration: none;">${data.user.charAt(0).toUpperCase()}</a>`;
+
 
     if (data.description && data.description.trim() !== '') {
       lbDesc.textContent = data.description;
