@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Captured — A Visual Journal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'assets/css/home.css' %}" />
+</head>
+<body>
+
+  <!-- ───────────── NAVBAR ───────────── -->
+  <header class="navbar" id="navbar">
+    <a href="{% url 'home' %}" class="nav-logo">
+      <span class="logo-aperture">◎</span>
+      <span class="logo-text">Captured</span>
+    </a>
+
+    <nav class="nav-links">
+      {% if user.is_authenticated %}
+        <span class="nav-username">
+          <a href="{% url 'user_gallery' user.username %}"><span class="nav-avatar">{{ user.first_name|first|upper }}</span></a>
+        </span>
+        <a href="{% url 'photo_upload' %}" class="btn btn-outline">Upload</a>
+        <a href="{% url 'signout' %}" class="btn btn-ghost">Logout</a>
+      {% else %}
+        <a href="{% url 'signin' %}" class="btn btn-ghost">Log In</a>
+        <a href="{% url 'signup' %}" class="btn btn-outline">Join</a>
+      {% endif %}
+    </nav>
+
+    <!-- Mobile hamburger -->
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <!-- Mobile nav drawer -->
+    <div class="mobile-nav" id="mobileNav">
+      {% if user.is_authenticated %}
+        <span class="mobile-username">{{ user.username }}</span>
+        <a href="{% url 'photo_upload' %}">Upload Photo</a>
+        <a href="{% url 'signout' %}">Logout</a>
+      {% else %}
+        <a href="{% url 'signin' %}">Log In</a>
+        <a href="{% url 'signup' %}">Join</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <!-- ───────────── HERO STRIP ───────────── -->
+  <section class="hero-strip">
+    <p class="hero-eyebrow">A community visual journal</p>
+    <h1 class="hero-headline">Every frame, a story.</h1>
+    {% comment %} <p class="hero-sub">Trekkers, travellers, and explorers sharing the world one photograph at a time.</p> {% endcomment %}
+  </section>
+
+  <!-- ───────────── GALLERY ───────────── -->
+  <main class="gallery-section">
+    <div class="gallery-header">
+      <h2 class="section-label">Latest Photos</h2>
+      {% comment %} <span class="photo-count">{{ photos|length }} photo{{ photos|length|pluralize }}</span> {% endcomment %}
+    </div>
+
+    {% if image %}
+    <div class="photo-grid" id="photoGrid">
+      {% for i in image %}
+      <article
+        class="photo-card"
+        data-id="{{ i.id }}"
+        data-title="{{ i.title }}"
+        data-description="{{ i.description|default:'' }}"
+        data-user="{{ i.user.first_name }} {{ i.user.last_name }}"
+        data-userid="{{ i.user.username }}"
+        data-image="{{ i.image.url }}"
+        tabindex="0"
+        role="button"
+        aria-label="View {{ i.title }} by {{ i.user.first_name }}"
+      >
+        <div class="card-image-wrap">
+          <img
+            src="{{ i.image.url }}"
+            alt="{{ i.title }}"
+            class="card-img"
+            loading="lazy"
+          />
+          <div class="card-overlay">
+            <div class="card-meta">
+              <div class="card-text">
+                <span class="card-title">{{ i.title|title }}</span>
+                <span class="card-username">{{ i.user.first_name }} {{ i.user.last_name }}</span>
+              </div>
+            </div>
+            <span class="card-expand-hint">Click to expand</span>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+
+    {% else %}
+    <!-- Empty state -->
+    <div class="empty-state">
+      <div class="empty-icon">◎</div>
+      <h3>No photos yet.</h3>
+      <p>Be the first to share a moment from your journey.</p>
+      {% if user.is_authenticated %}
+        <a href="{% url 'photo_upload' %}" class="btn btn-outline">Upload your first photo</a>
+      {% else %}
+        <a href="{% url 'signup' %}" class="btn btn-outline">Join to share photos</a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </main>
+
+  <!-- ───────────── LIGHTBOX ───────────── -->
+  <div class="lightbox-backdrop" id="lightboxBackdrop" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
+
+    <div class="lightbox-inner">
+      <div class="lightbox-image-wrap">
+        <img src="" alt="" class="lightbox-img" id="lightboxImg" />
+      </div>
+      <div class="lightbox-details" id="lightboxDetails">
+        <div class="lb-user-row">
+          <span class="lb-avatar" id="lbAvatar"></span>
+          <div>
+            <span class="lb-username" id="lbUsername"></span>
+          </div>
+        </div>
+        <h2 class="lb-title" id="lbTitle"></h2>
+        <p class="lb-description" id="lbDescription"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────────── FOOTER ───────────── -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-text">Captured</span>
+        <p class="footer-tagline">Documenting the world's hidden trails.</p>
+      </div>
+      <div class="footer-links">
+        {% if user.is_authenticated %}
+          <a href="{% url 'user_gallery' user.id %}">Gallery</a>
+          <a href="{% url 'photo_upload' %}">Upload</a>
+        {% else %}
+          <a href="{% url 'signup' %}">Join</a>
+        {% endif %}
+      </div>
+    </div>
+  </footer>
+
+  <script src="{% static 'assets/js/home.js' %}"></script>
+</body>
+</html>

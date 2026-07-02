@@ -8,6 +8,7 @@ register_heif_opener()
 
 
 def convert_heif_to_jpeg(uploaded_file):
+    """converts the HEIC/HEIF images to JPEG format"""
     # Open the uploaded HEIC image
     image = Image.open(uploaded_file)
 

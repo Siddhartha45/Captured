@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join — Captured</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'assets/css/auth.css' %}" />
+</head>
+<body class="auth-page">
+
+  <!-- ── Navbar ── -->
+  <header class="navbar" id="navbar">
+    <a href="{% url 'home' %}" class="nav-logo">
+      <span class="logo-aperture">◎</span>
+      <span class="logo-text">Captured</span>
+    </a>
+    <nav class="nav-links">
+      <a href="{% url 'signin' %}" class="btn btn-ghost">Sign In</a>
+    </nav>
+  </header>
+
+  <main class="auth-main">
+
+    <!-- Left panel — decorative -->
+    <div class="auth-panel auth-panel--left auth-panel--amber">
+      <div class="panel-content">
+        <span class="panel-eyebrow">New here</span>
+        <h2 class="panel-headline">Start sharing<br/>your world.</h2>
+        <p class="panel-sub">Upload your photos, document your treks, and share the trails no one else knows.</p>
+        <div class="panel-aperture">◎</div>
+      </div>
+    </div>
+
+    <!-- Right panel — form -->
+    <div class="auth-panel auth-panel--right">
+      <div class="auth-form-wrap">
+
+        <div class="auth-header">
+          <p class="form-eyebrow accent--amber">Create Account</p>
+          <h1 class="form-title">Join Captured.</h1>
+        </div>
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="auth-alert auth-alert--{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        <form method="POST" action="{% url 'signup' %}" class="auth-form">
+          {% csrf_token %}
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="first_name" class="form-label">First Name</label>
+              <input
+                type="text"
+                id="first_name"
+                name="first_name"
+                class="form-input"
+                placeholder="John"
+                autocomplete="given-name"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="last_name" class="form-label">Last Name</label>
+              <input
+                type="text"
+                id="last_name"
+                name="last_name"
+                class="form-input"
+                placeholder="Doe"
+                autocomplete="family-name"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-input"
+              placeholder="you@example.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <div class="input-wrap">
+              <input
+                type="password"
+                id="password"
+                name="password1"
+                class="form-input"
+                placeholder="••••••••"
+                autocomplete="new-password"
+                required
+              />
+              <button type="button" class="toggle-password" aria-label="Show password">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password2" class="form-label">Confirm Password</label>
+            <div class="input-wrap">
+              <input
+                type="password"
+                id="password2"
+                name="password2"
+                class="form-input"
+                placeholder="••••••••"
+                autocomplete="new-password"
+                required
+              />
+              <button type="button" class="toggle-password" aria-label="Show password">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-auth btn-auth--amber">Create Account</button>
+
+        </form>
+
+        <div class="auth-footer-links">
+          <a href="{% url 'signin' %}">Already have an account? <span>Sign in</span></a>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script src="{% static 'assets/js/auth.js' %}"></script>
+</body>
+</html>

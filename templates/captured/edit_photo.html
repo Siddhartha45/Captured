@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Photo — Captured</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'assets/css/home.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/auth.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/upload.css' %}" />
+</head>
+<body class="auth-page">
+
+  <!-- ── Navbar ── -->
+  <header class="navbar" id="navbar">
+    <a href="{% url 'home' %}" class="nav-logo">
+      <span class="logo-aperture">◎</span>
+      <span class="logo-text">Captured</span>
+    </a>
+    <nav class="nav-links">
+      <span class="nav-username">
+        <a href="{% url 'user_gallery' user.username %}"><span class="nav-avatar">{{ user.first_name|first|upper }}</span></a>
+      </span>
+      <a href="{% url 'photo_upload' %}" class="btn btn-outline">Upload</a>
+      <a href="{% url 'signout' %}" class="btn btn-ghost">Logout</a>
+    </nav>
+  </header>
+
+  <main class="upload-main">
+    <div class="upload-wrap">
+
+      <!-- Page header -->
+      <div class="auth-header">
+        <p class="form-eyebrow accent--amber">Edit Photo</p>
+        <h1 class="form-title">Update your moment.</h1>
+      </div>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="auth-alert auth-alert--{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="POST" action="{% url 'photo_edit' photo.id %}" enctype="multipart/form-data" class="upload-form" novalidate>
+        {% csrf_token %}
+
+        <!-- ── Current image preview ── -->
+        <div class="edit-preview-wrap">
+          <p class="edit-preview-label">Current photo</p>
+          <div class="edit-preview-box">
+            <img
+              src="{{ photo.image.url }}"
+              alt="{{ photo.title }}"
+              class="edit-preview-img"
+            />
+          </div>
+        </div>
+
+        <!-- ── Title ── -->
+        <div class="form-group">
+          <label for="title" class="form-label">
+            Title
+            <span class="label-required">required</span>
+          </label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            class="form-input"
+            value="{{ photo.title }}"
+            maxlength="100"
+            required
+          />
+        </div>
+
+        <!-- ── Description ── -->
+        <div class="form-group">
+          <label for="description" class="form-label">
+            Description
+            <span class="label-optional">optional</span>
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            class="form-input form-textarea"
+            rows="4"
+            maxlength="1000"
+          >{{ photo.description }}</textarea>
+          <span class="char-count" id="charCount">{{ photo.description|length }} / 1000</span>
+        </div>
+
+        <div class="edit-actions">
+          <a href="{% url 'user_gallery' photo.user.id %}" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn-auth btn-auth--amber edit-submit-btn">Save Changes</button>
+        </div>
+
+      </form>
+
+    </div>
+  </main>
+
+  <script src="{% static 'assets/js/upload.js' %}"></script>
+</body>
+</html>

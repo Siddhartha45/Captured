@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
 
-
 urlpatterns = [
     path("signup/", views.signup, name="signup"),
     path("signin/", views.signin, name="signin"),
@@ -14,4 +13,5 @@ urlpatterns = [
         views.resend_verification_mail,
         name="resend_verification_mail",
     ),
+    path("change-password/", views.change_password, name="change_password"),
 ]

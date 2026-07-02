@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In — Captured</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'assets/css/auth.css' %}" />
+</head>
+<body class="auth-page">
+
+  <!-- ── Navbar ── -->
+  <header class="navbar" id="navbar">
+    <a href="{% url 'home' %}" class="nav-logo">
+      <span class="logo-aperture">◎</span>
+      <span class="logo-text">Captured</span>
+    </a>
+    <nav class="nav-links">
+      <a href="{% url 'signup' %}" class="btn btn-outline">Join</a>
+    </nav>
+  </header>
+
+  <main class="auth-main">
+
+    <!-- Left panel — decorative -->
+    <div class="auth-panel auth-panel--left">
+      <div class="panel-content">
+        <span class="panel-eyebrow">Welcome back</span>
+        <h2 class="panel-headline">Your journeys<br/>are waiting.</h2>
+        <p class="panel-sub">Every frame you've captured, right where you left it.</p>
+        <div class="panel-aperture">◎</div>
+      </div>
+    </div>
+
+    <!-- Right panel — form -->
+    <div class="auth-panel auth-panel--right">
+      <div class="auth-form-wrap">
+
+        <div class="auth-header">
+          <p class="form-eyebrow accent--sage">Sign In</p>
+          <h1 class="form-title">Good to see you.</h1>
+        </div>
+
+        <!-- Django messages -->
+        {% if messages %}
+          {% for message in messages %}
+            <div class="auth-alert auth-alert--{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        <form method="POST" action="{% url 'signin' %}" class="auth-form">
+          {% csrf_token %}
+
+          <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-input"
+              placeholder="you@example.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">
+              Password
+              <a href="{% url 'forgot_password' %}" class="label-link">Forgot password?</a>
+            </label>
+            <div class="input-wrap">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-input"
+                placeholder="••••••••"
+                autocomplete="current-password"
+                required
+              />
+              <button type="button" class="toggle-password" aria-label="Show password">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-auth">Sign In</button>
+
+        </form>
+
+        <div class="auth-footer-links">
+          <a href="{% url 'signup' %}">Don't have an account? <span>Join Captured</span></a>
+          <a href="{% url 'resend_verification_mail' %}">Didn't get a verification email? <span>Resend it</span></a>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script src="{% static 'assets/js/auth.js' %}"></script>
+</body>
+</html>

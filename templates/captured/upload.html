@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload Photo — Captured</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'assets/css/home.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/auth.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/css/upload.css' %}" />
+</head>
+<body class="auth-page">
+
+  <!-- ── Navbar ── -->
+  <header class="navbar" id="navbar">
+    <a href="{% url 'home' %}" class="nav-logo">
+      <span class="logo-aperture">◎</span>
+      <span class="logo-text">Captured</span>
+    </a>
+    <nav class="nav-links">
+      <span class="nav-username">
+        <a href="{% url 'user_gallery' user.username %}"><span class="nav-avatar">{{ user.first_name|first|upper }}</span></a>
+      </span>
+      <a href="{% url 'signout' %}" class="btn btn-ghost">Logout</a>
+    </nav>
+  </header>
+
+  <main class="upload-main">
+    <div class="upload-wrap">
+
+      <!-- Page header -->
+      <div class="auth-header">
+        <p class="form-eyebrow accent--sage">New Photo</p>
+        <h1 class="form-title">Share a moment.</h1>
+      </div>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="auth-alert auth-alert--{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="POST" action="{% url 'photo_upload' %}" enctype="multipart/form-data" class="upload-form" novalidate>
+        {% csrf_token %}
+
+        <!-- ── Image picker ── -->
+        <div class="upload-picker" id="uploadPicker">
+
+          <!-- Empty state — shown before image is selected -->
+          <div class="picker-empty" id="pickerEmpty">
+            <div class="picker-icon">◎</div>
+            <p class="picker-label">Drop your photo here</p>
+            <p class="picker-sub">or click to browse</p>
+            {% comment %} <p class="picker-hint">JPG, PNG, WEBP — max 10 MB</p> {% endcomment %}
+          </div>
+
+          <!-- Preview — shown after image is selected -->
+          <div class="picker-preview" id="pickerPreview">
+            <img src="" alt="Preview" class="preview-img" id="previewImg" />
+            <div class="preview-overlay">
+              <button type="button" class="preview-change-btn" id="previewChangeBtn">
+                Change photo
+              </button>
+            </div>
+          </div>
+
+          <!-- Hidden file input -->
+          <input
+            type="file"
+            id="imageInput"
+            name="image"
+            class="picker-input"
+            accept="image/jpeg,image/png,image/webp,image/heic"
+            required
+          />
+        </div>
+
+        <!-- ── Title ── -->
+        <div class="form-group">
+          <label for="title" class="form-label">
+            Title
+            <span class="label-required">required</span>
+          </label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            class="form-input"
+            placeholder="Title for the photo"
+            maxlength="100"
+            required
+          />
+        </div>
+
+        <!-- ── Description ── -->
+        <div class="form-group">
+          <label for="description" class="form-label">
+            Description
+            <span class="label-optional">optional</span>
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            class="form-input form-textarea"
+            placeholder="Share the story behind this photo..."
+            rows="4"
+            maxlength="1000"
+          ></textarea>
+          <span class="char-count" id="charCount">0 / 1000</span>
+        </div>
+
+        <button type="submit" class="btn-auth" id="submitBtn" disabled>Upload Photo</button>
+
+      </form>
+
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js"></script>
+  <script src="{% static 'assets/js/upload.js' %}"></script>
+</body>
+</html>

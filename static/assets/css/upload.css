@@ -1,0 +1,289 @@
+/* =============================================
+   CAPTURED — upload.css
+   Extends auth.css. Only upload-specific
+   styles live here.
+   ============================================= */
+
+/* ═══════════════════════════════════════
+   PAGE LAYOUT
+   ═══════════════════════════════════════ */
+.upload-main {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: var(--navbar-h);
+  padding: 48px 20px 64px;
+}
+
+.upload-wrap {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ── Upload form spacing ── */
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ═══════════════════════════════════════
+   IMAGE PICKER
+   ═══════════════════════════════════════ */
+.upload-picker {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  border: 2px dashed rgba(122, 158, 135, 0.35);
+  background: var(--surface);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.25s, background 0.25s;
+}
+
+.upload-picker:hover {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
+/* Drag-over state — toggled by JS */
+.upload-picker.drag-over {
+  border-color: var(--accent);
+  background: rgba(122, 158, 135, 0.08);
+}
+
+/* Has-image state — toggled by JS */
+.upload-picker.has-image {
+  border-style: solid;
+  border-color: rgba(122, 158, 135, 0.3);
+  cursor: default;
+}
+
+/* ── Empty state ── */
+.picker-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 24px;
+  text-align: center;
+  transition: opacity 0.2s;
+}
+
+.upload-picker.has-image .picker-empty {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.picker-icon {
+  font-size: 36px;
+  color: var(--accent);
+  opacity: 0.5;
+  margin-bottom: 6px;
+  transition: transform 0.3s ease, opacity 0.3s;
+}
+
+.upload-picker:hover .picker-icon {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+
+.picker-label {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.picker-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.picker-hint {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  opacity: 0.6;
+  margin-top: 4px;
+  letter-spacing: 0.02em;
+}
+
+/* ── Preview ── */
+.picker-preview {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.upload-picker.has-image .picker-preview {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* "Change photo" overlay — appears on hover */
+.preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 18, 26, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+.upload-picker.has-image:hover .preview-overlay {
+  opacity: 1;
+}
+
+.preview-change-btn {
+  background: var(--surface);
+  border: 1.5px solid var(--accent);
+  color: var(--accent);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 9px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.preview-change-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* Hidden file input — covers the entire picker so clicking anywhere works */
+.picker-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+/* When preview is visible, file input sits behind the overlay */
+.upload-picker.has-image .picker-input {
+  z-index: 0;
+}
+
+/* ═══════════════════════════════════════
+   FORM EXTRAS
+   ═══════════════════════════════════════ */
+.label-required {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.label-optional {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+}
+
+.char-count {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  opacity: 0.6;
+  text-align: right;
+  margin-top: -10px;
+}
+
+/* Submit button disabled state */
+.btn-auth:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════ */
+@media (max-width: 600px) {
+  .upload-main {
+    padding: 32px 16px 48px;
+  }
+
+  .upload-picker {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* ═══════════════════════════════════════
+   EDIT PAGE — append to bottom of upload.css
+   ═══════════════════════════════════════ */
+
+.edit-preview-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-preview-label {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.edit-preview-box {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* object-fit: contain so full image is visible without cropping */
+.edit-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.edit-submit-btn {
+  width: auto;
+  padding: 12px 28px;
+}
