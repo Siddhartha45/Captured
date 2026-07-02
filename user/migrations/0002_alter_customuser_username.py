@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
+        migrations.AddField(
             model_name='customuser',
             name='username',
             field=models.CharField(blank=True, max_length=15, null=True, unique=True),
